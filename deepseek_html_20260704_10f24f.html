@@ -1,0 +1,1126 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ابزارهای کاربردی | همه چی اینجاست</title>
+    <style>
+        :root {
+            --bg: #0a0a14;
+            --card: #141428;
+            --card2: #1a1a35;
+            --border: #252550;
+            --primary: #7c3aed;
+            --primary-light: #a78bfa;
+            --pink: #ec4899;
+            --cyan: #06b6d4;
+            --green: #10b981;
+            --yellow: #f59e0b;
+            --red: #ef4444;
+            --text: #e2e8f0;
+            --text2: #94a3b8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            background-image:
+                radial-gradient(ellipse at top right, rgba(124, 58, 237, 0.08) 0%, transparent 60%),
+                radial-gradient(ellipse at bottom left, rgba(6, 182, 212, 0.08) 0%, transparent 60%),
+                radial-gradient(ellipse at center, rgba(236, 72, 153, 0.04) 0%, transparent 70%);
+        }
+
+        .header {
+            text-align: center;
+            padding: 25px 20px;
+            background: rgba(20, 20, 40, 0.85);
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header h1 {
+            font-size: 26px;
+            background: linear-gradient(135deg, #7c3aed, #06b6d4, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 15px;
+        }
+
+        .tabs {
+            display: flex;
+            justify-content: center;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            padding: 10px 20px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            color: var(--text2);
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: 0.3s;
+            font-family: inherit;
+            white-space: nowrap;
+        }
+
+        .tab-btn:hover {
+            border-color: var(--primary);
+            color: var(--text);
+        }
+
+        .tab-btn.active {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: #fff;
+            box-shadow: 0 0 15px rgba(124, 58, 237, 0.3);
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeUp 0.35s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+
+        .card h2 {
+            font-size: 18px;
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* ========= ماشین حساب ========= */
+        .calc-display {
+            background: #0a0a18;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 18px;
+            text-align: left;
+            direction: ltr;
+            margin-bottom: 18px;
+            min-height: 80px;
+        }
+
+        .calc-display .expr {
+            font-size: 15px;
+            color: var(--text2);
+            min-height: 22px;
+            word-break: break-all;
+        }
+
+        .calc-display .res {
+            font-size: 34px;
+            font-weight: bold;
+            color: #fff;
+            word-break: break-all;
+        }
+
+        .calc-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+        }
+
+        .calc-btn {
+            padding: 16px;
+            font-size: 18px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            cursor: pointer;
+            background: var(--card2);
+            color: var(--text);
+            transition: 0.2s;
+            font-family: inherit;
+        }
+
+        .calc-btn:hover {
+            background: #252545;
+        }
+        .calc-btn.op {
+            background: rgba(124, 58, 237, 0.2);
+            color: var(--primary-light);
+        }
+        .calc-btn.eq {
+            background: var(--primary);
+            color: #fff;
+            grid-row: span 2;
+        }
+        .calc-btn.cl {
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--red);
+        }
+        .calc-btn.w2 {
+            grid-column: span 2;
+        }
+
+        /* ========= مترجم ========= */
+        .tr-box {
+            display: grid;
+            grid-template-columns: 1fr 50px 1fr;
+            gap: 10px;
+            align-items: start;
+        }
+
+        @media (max-width: 700px) {
+            .tr-box {
+                grid-template-columns: 1fr;
+            }
+            .swap-col {
+                display: flex;
+                justify-content: center;
+            }
+        }
+
+        .lang-sel {
+            width: 100%;
+            padding: 10px;
+            background: #0a0a18;
+            border: 1px solid var(--border);
+            color: var(--text);
+            border-radius: 10px;
+            font-size: 13px;
+            margin-bottom: 8px;
+            font-family: inherit;
+            cursor: pointer;
+        }
+
+        .tr-area {
+            width: 100%;
+            height: 190px;
+            padding: 14px;
+            background: #0a0a18;
+            border: 1px solid var(--border);
+            color: var(--text);
+            border-radius: 12px;
+            resize: none;
+            font-size: 15px;
+            font-family: inherit;
+            line-height: 1.9;
+        }
+
+        .tr-area:focus,
+        .lang-sel:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .swap-btn {
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            background: var(--primary);
+            border: none;
+            color: #fff;
+            font-size: 20px;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 45px;
+        }
+
+        .swap-btn:hover {
+            transform: rotate(180deg);
+            background: var(--primary-light);
+        }
+
+        .tr-action {
+            width: 100%;
+            padding: 13px;
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-size: 15px;
+            cursor: pointer;
+            margin-top: 12px;
+            font-family: inherit;
+            transition: 0.3s;
+        }
+
+        .tr-action:hover {
+            background: var(--primary-light);
+        }
+
+        /* ========= فکت ========= */
+        .fact-card {
+            background: var(--card2);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 30px;
+            text-align: center;
+            min-height: 140px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .fact-emoji {
+            font-size: 55px;
+            margin-bottom: 10px;
+        }
+
+        .fact-cat {
+            display: inline-block;
+            padding: 4px 14px;
+            background: rgba(124, 58, 237, 0.2);
+            border-radius: 20px;
+            font-size: 12px;
+            color: var(--primary-light);
+            margin-bottom: 12px;
+        }
+
+        .fact-text {
+            font-size: 17px;
+            line-height: 2.1;
+        }
+
+        .cat-btns {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 16px;
+        }
+
+        .cat-btn {
+            padding: 7px 14px;
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text2);
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 12px;
+            font-family: inherit;
+            transition: 0.3s;
+        }
+
+        .cat-btn:hover,
+        .cat-btn.active {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: #fff;
+        }
+
+        .btn-row {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 14px;
+        }
+
+        .btn {
+            padding: 10px 22px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 14px;
+            font-family: inherit;
+            border: none;
+            transition: 0.3s;
+        }
+
+        .btn-main {
+            background: var(--primary);
+            color: #fff;
+        }
+        .btn-main:hover {
+            background: var(--primary-light);
+            transform: translateY(-2px);
+        }
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text);
+        }
+        .btn-outline:hover {
+            border-color: var(--primary);
+        }
+
+        /* ========= متن به گفتار ========= */
+        .tts-area {
+            width: 100%;
+            height: 140px;
+            padding: 14px;
+            background: #0a0a18;
+            border: 1px solid var(--border);
+            color: var(--text);
+            border-radius: 12px;
+            resize: none;
+            font-size: 15px;
+            font-family: inherit;
+            margin-bottom: 12px;
+            line-height: 1.9;
+        }
+
+        .tts-area:focus {
+            outline: none;
+            border-color: var(--cyan);
+        }
+
+        .voice-row {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .voice-sel {
+            flex: 1;
+            min-width: 140px;
+            padding: 10px;
+            background: #0a0a18;
+            border: 1px solid var(--border);
+            color: var(--text);
+            border-radius: 10px;
+            font-family: inherit;
+            cursor: pointer;
+        }
+
+        /* ========= تولید رنگ ========= */
+        .color-preview {
+            width: 100%;
+            height: 150px;
+            border-radius: 14px;
+            margin-bottom: 14px;
+            transition: 0.4s;
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            font-weight: bold;
+            text-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+        }
+
+        .color-info {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 12px;
+        }
+
+        .color-chip {
+            flex: 1;
+            min-width: 80px;
+            padding: 12px;
+            background: #0a0a18;
+            border-radius: 10px;
+            text-align: center;
+            font-family: monospace;
+            font-size: 14px;
+            border: 1px solid var(--border);
+        }
+
+        /* ========= پسورد ========= */
+        .pw-display {
+            background: #0a0a18;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px;
+            font-size: 20px;
+            text-align: center;
+            font-family: monospace;
+            margin-bottom: 12px;
+            word-break: break-all;
+            letter-spacing: 2px;
+            direction: ltr;
+        }
+
+        .pw-options {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 12px;
+            font-size: 13px;
+        }
+
+        .pw-options label {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+            color: var(--text2);
+        }
+
+        .pw-options input[type="checkbox"] {
+            accent-color: var(--primary);
+        }
+
+        .pw-options input[type="range"] {
+            accent-color: var(--primary);
+            width: 100px;
+        }
+
+        /* ========= ساعت جهانی ========= */
+        .clock-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: 10px;
+        }
+
+        .clock-item {
+            background: var(--card2);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 16px;
+            text-align: center;
+        }
+
+        .clock-city {
+            font-size: 13px;
+            color: var(--text2);
+            margin-bottom: 6px;
+        }
+
+        .clock-time {
+            font-size: 20px;
+            font-weight: bold;
+            font-family: monospace;
+            direction: ltr;
+        }
+
+        .clock-date {
+            font-size: 11px;
+            color: var(--text2);
+            margin-top: 4px;
+        }
+
+        /* ========= نوتیفیکیشن ========= */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            padding: 13px 20px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            color: var(--text);
+            z-index: 9999;
+            animation: slideIn 0.3s;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+            font-size: 14px;
+        }
+
+        .toast.ok {
+            border-color: var(--green);
+        }
+        .toast.err {
+            border-color: var(--red);
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .footer {
+            text-align: center;
+            padding: 25px;
+            color: var(--text2);
+            font-size: 12px;
+        }
+
+        input[type="number"] {
+            width: 70px;
+            padding: 6px;
+            background: #0a0a18;
+            border: 1px solid var(--border);
+            color: var(--text);
+            border-radius: 8px;
+            font-family: inherit;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>✨ همه چی اینجاست ✨</h1>
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('calc')">🧮 ماشین حساب</button>
+            <button class="tab-btn" onclick="switchTab('trans')">🌐 مترجم</button>
+            <button class="tab-btn" onclick="switchTab('facts')">🤯 فکت</button>
+            <button class="tab-btn" onclick="switchTab('tts')">🔊 متن به گفتار</button>
+            <button class="tab-btn" onclick="switchTab('color')">🎨 رنگ</button>
+            <button class="tab-btn" onclick="switchTab('pass')">🔐 پسورد</button>
+            <button class="tab-btn" onclick="switchTab('clock')">🕐 ساعت جهانی</button>
+        </div>
+    </div>
+
+    <div class="container">
+
+        <!-- ==================== ماشین حساب ==================== -->
+        <div id="tab-calc" class="tab-content active">
+            <div class="card">
+                <h2>🧮 ماشین حساب</h2>
+                <div class="calc-display">
+                    <div class="expr" id="calcExpr"></div>
+                    <div class="res" id="calcRes">0</div>
+                </div>
+                <div class="calc-grid">
+                    <button class="calc-btn cl" onclick="calcClear()">C</button>
+                    <button class="calc-btn op" onclick="calcApp('(')">(</button>
+                    <button class="calc-btn op" onclick="calcApp(')')">)</button>
+                    <button class="calc-btn op" onclick="calcApp('/')">÷</button>
+                    <button class="calc-btn" onclick="calcApp('7')">7</button>
+                    <button class="calc-btn" onclick="calcApp('8')">8</button>
+                    <button class="calc-btn" onclick="calcApp('9')">9</button>
+                    <button class="calc-btn op" onclick="calcApp('*')">×</button>
+                    <button class="calc-btn" onclick="calcApp('4')">4</button>
+                    <button class="calc-btn" onclick="calcApp('5')">5</button>
+                    <button class="calc-btn" onclick="calcApp('6')">6</button>
+                    <button class="calc-btn op" onclick="calcApp('-')">−</button>
+                    <button class="calc-btn" onclick="calcApp('1')">1</button>
+                    <button class="calc-btn" onclick="calcApp('2')">2</button>
+                    <button class="calc-btn" onclick="calcApp('3')">3</button>
+                    <button class="calc-btn op" onclick="calcApp('+')">+</button>
+                    <button class="calc-btn w2" onclick="calcApp('0')">0</button>
+                    <button class="calc-btn" onclick="calcApp('.')">.</button>
+                    <button class="calc-btn eq" onclick="calcDo()">=</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== مترجم ==================== -->
+        <div id="tab-trans" class="tab-content">
+            <div class="card">
+                <h2>🌐 مترجم</h2>
+                <div class="tr-box">
+                    <div>
+                        <select class="lang-sel" id="srcLang">
+                            <option value="fa">فارسی</option><option value="en">English</option>
+                            <option value="ar">العربية</option><option value="tr">Türkçe</option>
+                            <option value="fr">Français</option><option value="de">Deutsch</option>
+                            <option value="es">Español</option><option value="it">Italiano</option>
+                            <option value="ja">日本語</option><option value="ko">한국어</option>
+                            <option value="zh">中文</option><option value="ru">Русский</option>
+                            <option value="pt">Português</option><option value="hi">हिन्दी</option>
+                        </select>
+                        <textarea class="tr-area" id="srcText" placeholder="متن خود را بنویسید..." oninput="trCount()"></textarea>
+                        <small style="color:var(--text2);"><span id="trCount">0</span>/5000</small>
+                    </div>
+                    <div class="swap-col">
+                        <button class="swap-btn" onclick="trSwap()">⇄</button>
+                    </div>
+                    <div>
+                        <select class="lang-sel" id="tgtLang">
+                            <option value="en">English</option><option value="fa">فارسی</option>
+                            <option value="ar">العربية</option><option value="tr">Türkçe</option>
+                            <option value="fr">Français</option><option value="de">Deutsch</option>
+                            <option value="es">Español</option><option value="it">Italiano</option>
+                            <option value="ja">日本語</option><option value="ko">한국어</option>
+                            <option value="zh">中文</option><option value="ru">Русский</option>
+                            <option value="pt">Português</option><option value="hi">हिन्दी</option>
+                        </select>
+                        <textarea class="tr-area" id="tgtText" placeholder="ترجمه..." readonly></textarea>
+                    </div>
+                </div>
+                <button class="tr-action" onclick="trDo()">🔄 ترجمه کن</button>
+            </div>
+        </div>
+
+        <!-- ==================== فکت ==================== -->
+        <div id="tab-facts" class="tab-content">
+            <div class="card">
+                <h2>🤯 فکت‌های عجیب و جالب</h2>
+                <div class="cat-btns" id="catBtns">
+                    <button class="cat-btn active" onclick="factFilter('all')">همه</button>
+                    <button class="cat-btn" onclick="factFilter('science')">🔬 علم</button>
+                    <button class="cat-btn" onclick="factFilter('animal')">🐾 حیوان</button>
+                    <button class="cat-btn" onclick="factFilter('history')">📜 تاریخ</button>
+                    <button class="cat-btn" onclick="factFilter('space')">🚀 فضا</button>
+                    <button class="cat-btn" onclick="factFilter('human')">🧠 انسان</button>
+                    <button class="cat-btn" onclick="factFilter('food')">🍕 غذا</button>
+                    <button class="cat-btn" onclick="factFilter('tech')">💻 تکنولوژی</button>
+                    <button class="cat-btn" onclick="factFilter('money')">💵 پول</button>
+                    <button class="cat-btn" onclick="factFilter('sport')">⚽ ورزش</button>
+                    <button class="cat-btn" onclick="factFilter('art')">🎨 هنر</button>
+                </div>
+                <div class="fact-card" id="factCard">
+                    <div>
+                        <div class="fact-emoji" id="factEmoji">🤯</div>
+                        <div class="fact-cat" id="factCat">عمومی</div>
+                        <p class="fact-text" id="factText">روی دکمه کلیک کن!</p>
+                    </div>
+                </div>
+                <div class="btn-row">
+                    <button class="btn btn-main" onclick="factShow()">🎲 فکت تصادفی</button>
+                    <button class="btn btn-outline" onclick="factShare()">📤 اشتراک‌گذاری</button>
+                    <button class="btn btn-outline" onclick="factCopy()">📋 کپی</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== متن به گفتار ==================== -->
+        <div id="tab-tts" class="tab-content">
+            <div class="card">
+                <h2>🔊 تبدیل متن به گفتار</h2>
+                <textarea class="tts-area" id="ttsText" placeholder="متنت رو اینجا بنویس تا برات بخونم..."></textarea>
+                <div class="voice-row">
+                    <select class="voice-sel" id="ttsVoice"></select>
+                    <button class="btn btn-main" onclick="ttsSpeak()">🔊 بخون</button>
+                    <button class="btn btn-outline" onclick="ttsStop()">⏹ توقف</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== تولید رنگ ==================== -->
+        <div id="tab-color" class="tab-content">
+            <div class="card">
+                <h2>🎨 تولید پالت رنگی</h2>
+                <div class="color-preview" id="colorPreview" style="background:#7c3aed;">#7C3AED</div>
+                <div class="color-info">
+                    <div class="color-chip" id="colorHex">HEX: #7C3AED</div>
+                    <div class="color-chip" id="colorRgb">RGB: 124,58,237</div>
+                    <div class="color-chip" id="colorHsl">HSL: 262,83%,58%</div>
+                </div>
+                <div class="btn-row">
+                    <button class="btn btn-main" onclick="colorGen()">🎲 رنگ تصادفی</button>
+                    <button class="btn btn-outline" onclick="colorCopy()">📋 کپی HEX</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== پسورد ==================== -->
+        <div id="tab-pass" class="tab-content">
+            <div class="card">
+                <h2>🔐 تولید رمز عبور قوی</h2>
+                <div class="pw-display" id="pwDisplay">کلیک کن...</div>
+                <div class="pw-options">
+                    <label>طول: <input type="range" id="pwLen" min="6" max="40" value="16" oninput="document.getElementById('pwLenVal').textContent=this.value"><span id="pwLenVal">16</span></label>
+                    <label><input type="checkbox" id="pwUpper" checked> A-Z</label>
+                    <label><input type="checkbox" id="pwLower" checked> a-z</label>
+                    <label><input type="checkbox" id="pwNum" checked> 0-9</label>
+                    <label><input type="checkbox" id="pwSym" checked> !@#$</label>
+                </div>
+                <div class="btn-row">
+                    <button class="btn btn-main" onclick="passGen()">🎲 تولید پسورد</button>
+                    <button class="btn btn-outline" onclick="passCopy()">📋 کپی</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== ساعت جهانی ==================== -->
+        <div id="tab-clock" class="tab-content">
+            <div class="card">
+                <h2>🕐 ساعت جهانی</h2>
+                <div class="clock-grid" id="clockGrid">
+                    <!-- با JS پر میشه -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">🚀 ساخته شده با عشق | همه چی توی یه فایل</div>
+
+    <script>
+        // ==================== تب‌ها ====================
+        function switchTab(name) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById('tab-' + name).classList.add('active');
+            event.target.classList.add('active');
+            if (name === 'clock') updateClocks();
+            if (name === 'tts') loadVoices();
+        }
+
+        function toast(msg, type) {
+            const t = document.createElement('div');
+            t.className = 'toast ' + (type || 'ok');
+            t.textContent = msg;
+            document.body.appendChild(t);
+            setTimeout(() => { t.style.opacity = '0';
+                t.style.transition = '0.3s';
+                setTimeout(() => t.remove(), 300); }, 2500);
+        }
+
+        // ==================== ماشین حساب ====================
+        let calcStr = '';
+
+        function calcApp(v) {
+            const ops = ['+', '-', '*', '/'];
+            const last = calcStr.slice(-1);
+            if (ops.includes(v) && ops.includes(last)) calcStr = calcStr.slice(0, -1);
+            calcStr += v;
+            document.getElementById('calcExpr').textContent = calcStr.replace(/\*/g, '×').replace(/\//g, '÷');
+        }
+
+        function calcClear() { calcStr = '';
+            document.getElementById('calcExpr').textContent = '';
+            document.getElementById('calcRes').textContent = '0'; }
+
+        function calcDo() {
+            try {
+                let r = eval(calcStr.replace(/×/g, '*').replace(/÷/g, '/'));
+                if (!isFinite(r)) { document.getElementById('calcRes').textContent = 'خطا'; return; }
+                r = Number.isInteger(r) ? r : parseFloat(r.toFixed(8));
+                document.getElementById('calcRes').textContent = r;
+                calcStr = r.toString();
+                document.getElementById('calcExpr').textContent = '';
+            } catch (e) { document.getElementById('calcRes').textContent = 'خطا'; }
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (!document.getElementById('tab-calc').classList.contains('active')) return;
+            const k = e.key;
+            if (k >= '0' && k <= '9') calcApp(k);
+            else if (k === '.') calcApp('.');
+            else if (k === '+') calcApp('+');
+            else if (k === '-') calcApp('-');
+            else if (k === '*') calcApp('*');
+            else if (k === '/') { e.preventDefault();
+                calcApp('/'); } else if (k === '(') calcApp('(');
+            else if (k === ')') calcApp(')');
+            else if (k === 'Enter' || k === '=') { e.preventDefault();
+                calcDo(); } else if (k === 'Escape') calcClear();
+            else if (k === 'Backspace') { calcStr = calcStr.slice(0, -1);
+                document.getElementById('calcExpr').textContent = calcStr.replace(/\*/g, '×').replace(/\//g, '÷'); }
+        });
+
+        // ==================== مترجم ====================
+        function trCount() { document.getElementById('trCount').textContent = document.getElementById('srcText').value
+                .length; }
+
+        function trSwap() {
+            const s = document.getElementById('srcLang');
+            const t = document.getElementById('tgtLang');
+            const st = document.getElementById('srcText');
+            const tt = document.getElementById('tgtText');[s.value, t.value] = [t.value, s.value];[st.value, tt.value] = [
+                tt.value, st.value
+            ];
+            trCount();
+        }
+
+        function trDo() {
+            const txt = document.getElementById('srcText').value.trim();
+            const sl = document.getElementById('srcLang').value;
+            const tl = document.getElementById('tgtLang').value;
+            const out = document.getElementById('tgtText');
+            if (!txt) return toast('متنی وارد کن', 'err');
+            if (sl === tl) return toast('زبان‌ها یکسان هستند', 'err');
+            out.value = 'در حال ترجمه...';
+            fetch(
+                    `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${sl}&tl=${tl}&dt=t&q=${encodeURIComponent(txt)}`
+                    )
+                .then(r => r.json())
+                .then(d => {
+                    let tr = '';
+                    if (d && d[0]) d[0].forEach(i => { if (i[0]) tr += i[0]; });
+                    out.value = tr || 'خطا در ترجمه';
+                })
+                .catch(() => { out.value = '⚠️ خطا در اتصال. اینترنت را بررسی کنید.'; });
+        }
+
+        // ==================== فکت‌ها ====================
+        const factData = {
+            all: [],
+            science: [
+                { e: '🔬', t: 'یک قاشق چای‌خوری از ستاره نوترونی ۶ میلیارد تن وزن دارد!' },
+                { e: '⚡', t: 'دمای صاعقه ۵ برابر گرم‌تر از سطح خورشید است (۳۰ هزار درجه).' },
+                { e: '🧬', t: 'DNA انسان و موز ۶۰٪ شباهت دارند!' },
+                { e: '💎', t: 'باران در زهره از اسید سولفوریک تشکیل شده.' },
+                { e: '🔊', t: 'صدا در آب ۴ برابر سریع‌تر از هوا حرکت می‌کند.' },
+                { e: '🧲', t: 'میدان مغناطیسی زمین هر ۲۰۰ تا ۳۰۰ هزار سال جابجا می‌شود.' },
+                { e: '🔥', t: 'آتش بدون گرانش کره‌ای شکل می‌شود.' },
+                { e: '🧪', t: 'هلیم در دمای نزدیک صفر مطلق به مایع تبدیل شده و از دیواره ظرف بالا می‌رود!' },
+                { e: '💡', t: 'لامپ‌های LED تا ۲۵ برابر بیشتر از لامپ‌های رشته‌ای عمر می‌کنند.' },
+                { e: '🌡️', t: 'سردترین نقطه جهان در آزمایشگاهی در فنلاند به دمای ۰.۰۰۰۰۰۰۰۰۰۱ کلوین رسید.' },
+                { e: '🧊', t: 'آب گرم سریع‌تر از آب سرد یخ می‌زند! به این پدیده "اثر امپمبا" می‌گویند.' },
+                { e: '🫧', t: 'حباب‌های صابون از شیشه نازک‌ترند؛ ضخامتشان فقط چند مولکول است.' },
+            ],
+            animal: [
+                { e: '🐙', t: 'اختاپوس ۳ قلب و خون آبی دارد!' },
+                { e: '🦋', t: 'پروانه‌ها با پاهایشان مزه را می‌چشند.' },
+                { e: '🐬', t: 'دلفین‌ها با یک چشم باز می‌خوابند، نیمی از مغزشان بیدار است.' },
+                { e: '🦘', t: 'کانگوروها نمی‌توانند عقب‌عقب راه بروند.' },
+                { e: '🐘', t: 'فیل‌ها تنها حیواناتی هستند که نمی‌توانند بپرند.' },
+                { e: '🦩', t: 'فلامینگو فقط وقتی سرش وارونه است می‌تواند غذا بخورد.' },
+                { e: '🐌', t: 'حلزون می‌تواند تا ۳ سال بخوابد!' },
+                { e: '🦈', t: 'کوسه‌ها قبل از دایناسورها وجود داشتند، بیش از ۴۰۰ میلیون سال!' },
+                { e: '🐝', t: 'زنبور عسل در طول عمرش فقط ۱/۱۲ قاشق چای‌خوری عسل تولید می‌کند.' },
+                { e: '🐧', t: 'پنگوئن‌ها زانو دارند اما داخل بدنشان پنهان است!' },
+                { e: '🦥', t: 'تنبل‌ها هفته‌ای یکبار از درخت پایین می‌آیند برای دستشویی!' },
+                { e: '🐓', t: 'مرغ‌ها می‌توانند چهره انسان را تشخیص دهند و تا ۱۰۰ چهره را به خاطر بسپارند.' },
+                { e: '🦜', t: 'بعضی طوطی‌ها می‌توانند تا ۱۰۰۰ کلمه یاد بگیرند.' },
+                { e: '🐊', t: 'تمساح‌ها نمی‌توانند زبانشان را بیرون بیاورند.' },
+            ],
+            history: [
+                { e: '📜', t: 'کلئوپاترا به اختراع آیفون نزدیک‌تر بود تا ساخت اهرام مصر!' },
+                { e: '🏛', t: 'رومیان باستان از ادرار به عنوان دهان‌شویه استفاده می‌کردند!' },
+                { e: '⏳', t: 'کوتاه‌ترین جنگ تاریخ ۳۸ دقیقه بود (بریتانیا و زنگبار).' },
+                { e: '🎩', t: 'ناپلئون در یک شکار از خرگوش‌ها شکست خورد!' },
+                { e: '📞', t: 'اولین پیام تلفنی: "آقای واتسون بیا اینجا، دلم برات تنگ شده"' },
+                { e: '🏺', t: 'مصر باستان بیش از ۳۰۰۰ سال دوام آورد، طولانی‌ترین تمدن تاریخ.' },
+                { e: '🎭', t: 'در یونان باستان، بازیگران فقط مرد بودند و نقش زن‌ها را هم مردان بازی می‌کردند.' },
+                { e: '🗡️', t: 'سامورایی‌ها قبل از جنگ عطر می‌زدند تا حتی در مرگ هم خوشبو باشند.' },
+            ],
+            space: [
+                { e: '🚀', t: 'یک روز در زهره از یک سالش طولانی‌تر است!' },
+                { e: '⭐', t: 'در فضا صدا وجود ندارد چون مولکولی برای انتقال نیست.' },
+                { e: '🪐', t: 'یک الماس به اندازه زمین در فضا شناور است!' },
+                { e: '🌙', t: 'رد پای فضانوردان روی ماه تا میلیون‌ها سال می‌ماند.' },
+                { e: '☀️', t: 'خورشید آنقدر بزرگ است که یک میلیون کره زمین در آن جا می‌شود.' },
+                { e: '🕳️', t: 'در سیاهچاله "اسپاگتی‌سازی" می‌شوید؛ جاذبه شما را مثل اسپاگتی می‌کشد!' },
+                { e: '🌌', t: 'تعداد ستاره‌های جهان از دانه‌های شن تمام سواحل زمین بیشتر است.' },
+                { e: '🛸', t: 'در ایستگاه فضایی، فضانوردان روزی ۱۶ بار طلوع و غروب می‌بینند.' },
+                { e: '🌑', t: 'ماه هر سال ۳.۸ سانتی‌متر از زمین دور می‌شود.' },
+            ],
+            human: [
+                { e: '🧠', t: 'مغز انسان مثل یک لامپ ۲۰ وات برق مصرف می‌کند.' },
+                { e: '💪', t: 'قوی‌ترین عضله بدن، زبان است.' },
+                { e: '😴', t: 'انسان به طور متوسط ۶ سال از عمرش را در حال دیدن خواب است!' },
+                { e: '👃', t: 'بینی انسان می‌تواند بیش از ۱ تریلیون بو را تشخیص دهد.' },
+                { e: '🦴', t: 'نوزادان ۳۰۰ استخوان دارند، بزرگسالان فقط ۲۰۶ تا.' },
+                { e: '❤️', t: 'قلب انسان روزی ۱۰۰٬۰۰۰ بار می‌تپد و ۷۵۰۰ لیتر خون پمپاژ می‌کند.' },
+                { e: '👁️', t: 'چشم انسان می‌تواند ۱۰ میلیون رنگ مختلف را تشخیص دهد.' },
+                { e: '🦷', t: 'دندان انسان تنها بخشی از بدن است که نمی‌تواند خودش را ترمیم کند.' },
+                { e: '💇', t: 'موی انسان عملاً تجزیه‌ناپذیر است و قرن‌ها باقی می‌ماند.' },
+                { e: '🤲', t: 'اثر انگشت هر انسان منحصربه‌فرد است، حتی دوقلوهای همسان.' },
+            ],
+            food: [
+                { e: '🍯', t: 'عسل هرگز فاسد نمی‌شود! باستان‌شناسان عسل ۳۰۰۰ ساله خوراکی پیدا کردند.' },
+                { e: '🍌', t: 'موز نوعی توت است، اما توت‌فرنگی توت نیست!' },
+                { e: '🥕', t: 'هویج در اصل بنفش بود، نه نارنجی.' },
+                { e: '🍕', t: 'پیتزا غذای فقرای ناپل بود، الان محبوب‌ترین غذای جهان است.' },
+                { e: '🍫', t: 'شکلات تلخ برای دندان مفید است و از پوسیدگی جلوگیری می‌کند.' },
+                { e: '🥜', t: 'بادام زمینی جزو خانواده حبوبات است، نه آجیل!' },
+                { e: '🍎', t: 'بیش از ۷۵۰۰ نوع سیب در جهان وجود دارد.' },
+                { e: '🧅', t: 'پیاز وقتی بریده می‌شود گاز سولفوریک آزاد می‌کند که باعث اشک چشم می‌شود.' },
+            ],
+            tech: [
+                { e: '💻', t: 'اولین موس کامپیوتر از چوب ساخته شده بود!' },
+                { e: '📧', t: 'روزانه بیش از ۳۰۰ میلیارد ایمیل در جهان ارسال می‌شود.' },
+                { e: '📱', t: 'قدرت گوشی امروزی از کامپیوترهای فرود آپولو ۱۱ بیشتر است.' },
+                { e: '🖨️', t: 'اولین پرینتر سه‌بعدی سال ۱۹۸۴ ساخته شد.' },
+                { e: '🕹️', t: 'اولین بازی ویدیویی جهان "پونگ" بود که سال ۱۹۷۲ عرضه شد.' },
+                { e: '💾', t: 'اولین هارد دیسک جهان ۵ مگابایت بود و به اندازه دو یخچال!' },
+                { e: '🌐', t: 'اولین وب‌سایت جهان هنوز فعال است: info.cern.ch' },
+            ],
+            money: [
+                { e: '💵', t: 'اسکناس‌های دلار از پنبه ساخته می‌شوند، نه کاغذ.' },
+                { e: '🪙', t: 'بیت‌کوین در سال ۲۰۰۹ تقریباً رایگان بود، در ۲۰۲۱ به ۶۹ هزار دلار رسید.' },
+                { e: '🏦', t: 'اولین دستگاه خودپرداز جهان سال ۱۹۶۷ در لندن نصب شد.' },
+                { e: '💳', t: 'اولین کارت اعتباری سال ۱۹۵۰ در نیویورک معرفی شد.' },
+                { e: '💰', t: 'اگر تمام پول جهان را بین مردم تقسیم کنیم، به هر نفر حدود ۱۰ هزار دلار می‌رسد.' },
+            ],
+            sport: [
+                { e: '⚽', t: 'فوتبال محبوب‌ترین ورزش جهان با بیش از ۴ میلیارد طرفدار است.' },
+                { e: '🏀', t: 'اولین سبد بسکتبال از سبد هلو ساخته شده بود!' },
+                { e: '🏃', t: 'رکورد دوی ۱۰۰ متر جهان ۹.۵۸ ثانیه است (یوسین بولت).' },
+                { e: '♟️', t: 'تعداد حرکات ممکن در شطرنج از تعداد اتم‌های جهان بیشتر است!' },
+                { e: '🎾', t: 'توپ تنیس در اصل سفید بود، زرد شد تا در تلویزیون بهتر دیده شود.' },
+            ],
+            art: [
+                { e: '🎨', t: 'مونالیزا تا سال ۱۹۱۱ معروف نبود، تا اینکه دزدیده شد!' },
+                { e: '🎬', t: 'اولین فیلم جهان ۲.۱ ثانیه بود: "ورود قطار به ایستگاه"' },
+                { e: '🎵', t: 'موتسارت از ۵ سالگی شروع به آهنگسازی کرد.' },
+                { e: '📚', t: 'کتاب "دن کیشوت" با بیش از ۵۰۰ میلیون نسخه، پرفروش‌ترین کتاب تاریخ است.' },
+                { e: '🎭', t: 'شکسپیر بیش از ۱۷۰۰ کلمه به زبان انگلیسی اضافه کرد.' },
+            ],
+        };
+
+        // ترکیب همه
+        Object.keys(factData).forEach(k => { if (k !== 'all') factData.all = factData.all.concat(factData[k]); });
+        let factCat = 'all';
+        let factCur = null;
+
+        function factFilter(c) {
+            factCat = c;
+            document.querySelectorAll('#catBtns .cat-btn').forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
+            factShow();
+        }
+
+        function factShow() {
+            const arr = factCat === 'all' ? factData.all : factData[factCat];
+            const r = arr[Math.floor(Math.random() * arr.length)];
+            factCur = r;
+            document.getElementById('factEmoji').textContent = r.e;
+            document.getElementById('factCat').textContent = r.c || '';
+            document.getElementById('factText').textContent = r.t;
+            const card = document.getElementById('factCard');
+            card.style.transform = 'scale(1.03)';
+            setTimeout(() => card.style.transform = 'scale(1)', 200);
+        }
+
+        function factShare() {
+            if (!factCur) return toast('اول یه فکت انتخاب کن', 'err');
+            const txt = factCur.e + ' ' + factCur.t;
+            if (navigator.share) {
+                navigator.share({ title: 'فکت جالب', text: txt }).catch(() => {});
+            } else {
+                navigator.clipboard.writeText(txt).then(() => toast('📋 فکت کپی شد! حالا می‌تونی Paste کنی', 'ok'));
+            }
+        }
+
+        function factCopy() {
+            if (!factCur) return toast('اول یه فکت انتخاب کن', 'err');
+            const txt = factCur.e + ' ' + factCur.t;
+            navigator.clipboard.writeText(txt).then(() => toast('✅ فکت کپی شد!', 'ok')).catch(() => toast('خطا در کپی',
+                'err'));
+        }
+
+        // ==================== متن به گفتار ====================
+        let ttsSynth = window.speechSynthesis;
+        let ttsUtterance = null;
+        let ttsVoices = [];
+
+        function loadVoices() {
+            ttsVoices = ttsSynth.getVoices();
+            const sel = document.getElementById('ttsVoice');
+            sel.innerHTML = ttsVoices.map((v, i) => `<option value="${i}">${v.name} (${v.lang})</option>`).join('');
+        }
+        ttsSynth.onvoiceschanged = loadVoices;
+        loadVoices();
+
+        function ttsSpeak() {
+            ttsSynth.cancel();
+            const txt = document.getElementById('ttsText').value.trim();
+            if (!txt) return toast('متنی وارد کن', 'err');
+            ttsUtterance = new SpeechSynthesisUtterance(txt);
+            const idx = document.getElementById('ttsVoice').value;
+            if (ttsVoices[idx]) ttsUtterance.voice = ttsVoices[idx];
+            ttsUtterance.rate = 0.9;
+            ttsUtterance.pitch = 1;
+            ttsSynth.speak(ttsUtterance);
+            toast('🔊 در حال خواندن...', 'ok');
+        }
+
+        function ttsStop() { ttsSynth.cancel();
+            toast('⏹ متوقف شد', 'err'); }
+
+        // ==================== رنگ ====================
+        function colorGen() {
+            const r = Math.floor(Math.random() * 256);
+            const g = Math.floor(Math.random() * 256);
+            const b = Math.floor(Math.random() * 256);
+            const hex = '#' + [r, g, b].map(x => x.toString(16).padStart(2, '0')).join('').toUpperCase();
+            const lum = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+            const preview = document.getElementById('colorPreview');
+            preview.style.background = hex;
+            preview.textContent = hex;
+            preview.style.color = lum > 0.6 ? '#000' : '#fff';
+            document.getElementById('colorHex').textContent = 'HEX: ' + hex;
+            document.getElementById('colorRgb').textContent = `RGB: ${r},${g},${b}`;
+            const h = Math.round((r / 255) * 360);
+            document.getElementById('colorHsl').textContent = `HSL: ${h},${Math.round(lum*100)}%,50%`;
+        }
+
+        function colorCopy() {
+            const hex = document.getElementById('colorPreview').textContent;
+            navigator.clipboard.writeText(hex).then(() => toast('✅ رنگ کپی شد: ' + hex, 'ok'));
+        }
+
+        // ==================== پسورد ====================
+        function passGen() {
+            const len = +document.getElementById('pwLen').value;
+            const up = document.getElementById('pwUpper').checked;
+            const lo = document.getElementById('pwLower').checked;
+            const num = document.getElementById('pwNum').checked;
+            const sym = document.getElementById('pwSym').checked;
+            let chars = '';
+            if (up) chars += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            if (lo) chars += 'abcdefghijklmnopqrstuvwxyz';
+            if (num) chars += '0123456789';
+            if (sym) chars += '!@#$%^&*()_+-=[]{}|;:,.<>?';
+            if (!chars) return toast('حداقل یک گزینه انتخاب کن', 'err');
+            let pw = '';
+            for (let i = 0; i < len; i++) pw += chars[Math.floor(Math.random() * chars.length)];
+            document.getElementById('pwDisplay').textContent = pw;
+        }
+
+        function passCopy() {
+            const pw = document.getElementById('pwDisplay').textContent;
+            if (pw === 'کلیک کن...') return toast('اول پسورد تولید کن', 'err');
+            navigator.clipboard.writeText(pw).then(() => toast('✅ پسورد کپی شد!', 'ok'));
+        }
+
+        // ==================== ساعت جهانی ====================
+        const cities = [
+            { name: '🇮🇷 تهران', tz: 'Asia/Tehran' },
+            { name: '🇬🇧 لندن', tz: 'Europe/London' },
+            { name: '🇺🇸 نیویورک', tz: 'America/New_York' },
+            { name: '🇯🇵 توکیو', tz: 'Asia/Tokyo' },
+            { name: '🇦🇪 دبی', tz: 'Asia/Dubai' },
+            { name: '🇩🇪 برلین', tz: 'Europe/Berlin' },
+            { name: '🇨🇳 پکن', tz: 'Asia/Shanghai' },
+            { name: '🇦🇺 سیدنی', tz: 'Australia/Sydney' },
+            { name: '🇧🇷 سائوپائولو', tz: 'America/Sao_Paulo' },
+            { name: '🇮🇳 دهلی', tz: 'Asia/Kolkata' },
+            { name: '🇷🇺 مسکو', tz: 'Europe/Moscow' },
+            { name: '🇨🇦 تورنتو', tz: 'America/Toronto' },
+        ];
+
+        function updateClocks() {
+            const grid = document.getElementById('clockGrid');
+            grid.innerHTML = cities.map(c => {
+                const now = new Date();
+                const opts = { timeZone: c.tz, hour: '2-digit', minute: '2-digit', second: '2-digit',
+                    hour12: false };
+                const dateOpts = { timeZone: c.tz, weekday: 'short', day: 'numeric', month: 'short' };
+                const time = now.toLocaleTimeString('fa-IR', opts);
+                const date = now.toLocaleDateString('fa-IR', dateOpts);
+                return `<div class="clock-item"><div class="clock-city">${c.name}</div><div class="clock-time">${time}</div><div class="clock-date">${date}</div></div>`;
+            }).join('');
+        }
+        setInterval(() => { if (document.getElementById('tab-clock').classList.contains('active')) updateClocks(); },
+            1000);
+        updateClocks();
+
+        // ==================== شروع ====================
+        factShow();
+        colorGen();
+        passGen();
+    </script>
+</body>
+</html>
